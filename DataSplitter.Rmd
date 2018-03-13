@@ -1,0 +1,38 @@
+---
+title: "R Notebook to split the data into training and testing sets"
+output: html_notebook
+---
+### Set the values to determine the number of records for testing and training
+
+```{r}
+numTrainingRecordsPercentage = 85
+seedValue = 42
+```
+
+### Perform the split based on the configurations
+```{r}
+setwd("H:\\KE5107-Barry\\code")
+if(numTrainingRecordsPercentage >= 50 && numTrainingRecordsPercentage <= 90)
+{
+    trainingRatio = numTrainingRecordsPercentage / 100
+    vehicle_safety_df <- read.csv("data/vehicle_safety_original.csv")
+    head(vehicle_safety_df)
+    set.seed(seedValue)
+    nobs     <- nrow(vehicle_safety_df)
+    print(cat("Number of obs: ", nobs))
+    
+    # Get the rows that are sampled
+    sampledRowsForTraining <- sample(nobs, trainingRatio*nobs)
+    train_df    <- vehicle_safety_df[sampledRowsForTraining,]
+    
+    sampledRowsForTesting <- setdiff(1:nobs, sampledRowsForTraining)
+    test_df     <- vehicle_safety_df[sampledRowsForTesting,]
+    
+    write.csv(train_df, file = "data/training_vehicle_safety.csv",row.names=FALSE)
+    write.csv(test_df, file = "data/testing_vehicle_safety.csv",row.names=FALSE)
+}
+
+
+
+```
+
