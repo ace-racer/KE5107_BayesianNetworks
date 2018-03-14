@@ -19201,4 +19201,8 @@ GV_CURBWGT,GV_DVLAT,GV_DVLONG,GV_ENERGY,GV_LANES,GV_MODELYR,GV_OTVEHWGT,GV_SPLIM
 1580,0,-22,253,4,2000,2160,35,Passenger Car,75,Not Deployed,168,2,0,Female,66,Front,147,265,135,3.8955
 2220,8,-22,415,2,2001,1520,35,Passenger Car,38,Deployed,163,1,1,Female,65,Front,148,259,115,3.8332
 2100,0,-21,615,2,2001,2050,55,Truck (<=10000 lbs.),41,Deployed,183,2,1,Male,136,Front,168,338,135,5.6784
+<<<<<<< Updated upstream
 1430,59,-17,1516,2,2000,1540,35,Passenger Car,69,Not Deployed,180,1,1,Female,63,Left,149,266,65,3.9634
+=======
+1430,59,-17,1516,2,2000,1540,35,Passenger Car,69,Not Deployed,180,1,1,Female,63,Left,149,266,65,3.9634
+>>>>>>> Stashed changes
