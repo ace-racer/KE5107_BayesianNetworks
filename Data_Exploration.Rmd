@@ -1,3 +1,8 @@
+---
+title: "Data Exploration"
+output: html_notebook
+---
+
 Load R libraries
 ```{r}
 library(Amelia)
@@ -42,12 +47,18 @@ Use mice with Decision Tree to impute missing data.
 ```{r}
 imp.data <- mice(data, m=1, method='cart', printFlag=FALSE)
 summary(imp.data)
+
+# write results
+write.mice.imputation(mi.res=imp.data, name="mice_imp_cart" )
 ```
 
 Compare it with Mean value.
 ```{r}
 imp.data_raw_mean <- mice(data, m=1, defaultMethod=c('mean', 'cart', 'cart', 'cart'), printFlag=FALSE)
 summary(imp.data_raw_mean)
+
+# write results
+write.mice.imputation(mi.res=imp.data_raw_mean, name="mice_imp_mean" )
 ```
 
 Plot GV_DVLAT and VE_PDOF_TR for imputed data using Decision Tree.
