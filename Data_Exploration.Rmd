@@ -1,12 +1,15 @@
 ---
 title: "Data Exploration"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 Load R libraries
 ```{r}
 library(Amelia)
 library(mice)
+library(miceadds)
 library(ggplot2)
 library(lattice)
 ```
@@ -47,16 +50,22 @@ Use mice with Decision Tree to impute missing data.
 ```{r}
 imp.data <- mice(data, m=1, method='cart', printFlag=FALSE)
 summary(imp.data)
+```
 
+Write imputted mean values from decision tree model.
+```{r}
 # write results
-write.mice.imputation(mi.res=imp.data, name="mice_imp_cart" )
+write.mice.imputation(mi.res=imp.data, name="mice_imp_cart")
 ```
 
 Compare it with Mean value.
 ```{r}
 imp.data_raw_mean <- mice(data, m=1, defaultMethod=c('mean', 'cart', 'cart', 'cart'), printFlag=FALSE)
 summary(imp.data_raw_mean)
+```
 
+Write imputted mean values from mean model.
+```{r}
 # write results
 write.mice.imputation(mi.res=imp.data_raw_mean, name="mice_imp_mean" )
 ```
