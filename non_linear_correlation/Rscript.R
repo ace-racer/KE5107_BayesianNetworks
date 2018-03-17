@@ -1,3 +1,5 @@
+#R scrpit for plotting loss function fit lines to the scatter plot to see more clearly their relationships (if any)
+
 #specific stuff
 setwd("C:/Users/RyanTsan/GithubLocal/KE5107_BayesianNetworks/non_linear_correlation")
 getwd()
