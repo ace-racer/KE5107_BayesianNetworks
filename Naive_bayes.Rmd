@@ -1,0 +1,199 @@
+---
+title: "Naive bayes"
+output: html_notebook
+---
+
+```{r}
+library(caret)
+library(ggplot2)
+require(scales)
+library(bda)
+library(OneR)
+library(ggpubr)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r get the data}
+rm(list=ls())
+
+# load the dataset
+setwd("/Users/davidleonardi/Projects/KE5107_BayesianNetworks/")
+injuries <- read.csv("vehicle_safety_NASS2010_2000_2012.csv", encoding="UTF-8")
+
+# split the data
+train <- read.csv("training_vehicle_safety.csv", encoding="UTF-8")
+test <- read.csv("testing_vehicle_safety.csv", encoding="UTF-8")
+
+# set factor
+train$OA_MAIS <- as.factor(make.names(train$OA_MAIS))
+test$OA_MAIS <- as.factor(make.names(test$OA_MAIS))
+
+# bin x values
+train$GV_FOOTPRINT_BINNED <- as.factor(bin(train$GV_FOOTPRINT, nbins = 6, labels = c("1", "2", "3", "4", "5", "6")))
+```
+
+Training data summary
+```{r}
+summary(train)
+```
+
+## Plots
+
+Pot of severity of accidents based on training data.
+```{r, echo=FALSE}
+graph_mais <- ggplot(train, aes(OA_MAIS)) + 
+  geom_bar((aes(y = (..count..)/sum(..count..))), fill = "Blue") + 
+  scale_y_continuous(labels=percent) +
+labs(title = 'Graph 1: distribution of severity of accidents',
+     x = 'Severity of accident',
+     y = 'Percentage of incidents')
+
+graph_mais
+```
+
+Plot of vehicle footprint (original) based on training data.
+```{r}
+graph_mais <- ggplot(train, aes(GV_FOOTPRINT)) + 
+  geom_bar((aes(y = (..count..)/sum(..count..))), fill = "Blue") + 
+  scale_y_continuous(labels=percent) +
+labs(title = 'Graph 2: Distribution of Vehicle Footprint',
+     x = 'Vehicle Footprint',
+     y = 'Percentage of vehicle footprint')
+
+graph_mais
+```
+
+Plot of vehicle footprint (binned) based on training data.
+```{r}
+graph_mais <- ggplot(train, aes(GV_FOOTPRINT_BINNED)) + 
+  geom_bar((aes(y = (..count..)/sum(..count..))), fill = "Blue") + 
+  scale_y_continuous(labels=percent) +
+labs(title = 'Graph 2: Distribution of Vehicle Footprint (binned)',
+     x = 'Vehicle Footprint',
+     y = 'Percentage of vehicle footprint')
+
+graph_mais
+```
+
+
+## Scatter Plot
+
+Finding correlation between Vehicle Footprint (m2) and Vehicle Curb Weight (kg).
+```{r}
+ggscatter(train, x = "GV_CURBWGT", y = "GV_FOOTPRINT", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Vehicle Curb Weight (kg)", ylab = "Vehicle Footprint (m2)")
+```
+
+Finding correlation between Vehicle Footprint (m2) and Vehicle Wheelbase (m).
+```{r}
+ggscatter(train, x = "VE_WHEELBAS", y = "GV_FOOTPRINT", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Vehicle Wheelbase (m)", ylab = "Vehicle Footprint (m2)")
+```
+
+Finding correlation between Vehicle Footprint (m2) and Average Track Width (m).
+```{r}
+ggscatter(train, x = "VE_ORIGAVTW", y = "GV_FOOTPRINT", 
+          add = "reg.line", conf.int = TRUE, 
+          cor.coef = TRUE, cor.method = "pearson",
+          xlab = "Vehicle Average Track Width (m)", ylab = "Vehicle Footprint (m2)")
+```
+
+
+## model naive bayes
+```{r model, warnings = FALSE}
+
+# I get a LOT of warnings!
+# If I don't replace . with a variable name (like GV_CURBWGT) it will take forever.
+
+model <- train(OA_MAIS ~ GV_CURBWGT,
+               # trainControl(classProbs = TRUE),
+               # metric   =   "ROC",
+               data=train,
+               method = "nb"
+               )
+
+# perhaps binning is necessary?
+```
+
+
+```{r}
+# summarize results
+print(model)
+```
+
+```{r}
+summary(model)
+```
+
+
+```{r}
+# run prediction on testing data
+prediction_test <- predict(model, test)
+
+# confusion matrix based on testing data
+confusionMatrix(prediction_test, test$OA_MAIS)
+```
+
+
+```{r}
+# so try binning https://www.rdocumentation.org/packages/OneR/versions/2.2/topics/bin:
+
+train$GV_CURBWGT_binned <- as.factor(bin(train$GV_CURBWGT, nbins = 5, labels = c("1", "2", "3", "4", "5")))
+train$GV_LANES_binned <- as.factor(bin(train$GV_LANES, nbins = 5, labels = c("1", "2", "3", "4", "5")))
+
+
+# adds a column with five groups. 
+
+```
+
+
+```{r}
+model <- train(OA_MAIS ~ GV_CURBWGT_binned + GV_LANES_binned,
+               # trainControl(classProbs = TRUE),
+               # metric   =   "ROC",
+               data=train,
+               method = "nb"
+               )
+
+# still gives a lot of errors... and a long loading time... must be doing something wrong. Tried to add as.factor, but does not seem to have effect...
+
+
+# compare with other model (tree) to check if its due to the data
+model <- train(OA_MAIS~GV_CURBWGT_binned + GV_LANES_binned, 
+               data=train, 
+               # trControl=train_control, 
+               method = "rpart"
+               # control = rpart.control(minsplit = 20, minbucket = 7, maxdepth = 3, cp = 0.0100)
+               )
+### a tree is much faster... must be something wrong here...
+print(model)
+```
+
+
+```{r}
+
+# have to use binning for the test data as well... Maybe it is better to do it once and then split...
+
+test$GV_CURBWGT_binned <- as.factor(bin(test$GV_CURBWGT, nbins = 5, labels = c("1", "2", "3", "4", "5")))
+test$GV_LANES_binned <- as.factor(bin(test$GV_LANES, nbins = 5, labels = c("1", "2", "3", "4", "5")))
+
+
+# run prediction on testing data
+prediction_test <- predict(model, test)
+
+# confusion matrix based on testing data
+confusionMatrix(prediction_test, test$OA_MAIS)
+
+
+```
+
+we need to do tuning also: https://stackoverflow.com/questions/42248626/tuning-naive-bayes-classifier-with-caret-in-r
