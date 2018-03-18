@@ -15,7 +15,7 @@ setwd("H:\\KE5107-Barry\\code")
 if(numTrainingRecordsPercentage >= 50 && numTrainingRecordsPercentage <= 90)
 {
     trainingRatio = numTrainingRecordsPercentage / 100
-    vehicle_safety_df <- read.csv("data/vehicle_safety_original.csv")
+    vehicle_safety_df <- read.csv("data/vehicle_safety_imputed_data.csv")
     head(vehicle_safety_df)
     set.seed(seedValue)
     nobs     <- nrow(vehicle_safety_df)

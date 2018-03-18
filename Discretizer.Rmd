@@ -1,0 +1,170 @@
+---
+title: "Discretizer"
+output: html_notebook
+---
+
+# Function to get intervals
+```{r}
+INTERVAL_NAME_PREFIX = "s"
+get_interval_name <- function(val, increasing_sorted_intervals)
+{
+  # Get the name inclusive of the outer edge
+  #print(paste("Val", val))
+  discretized_column_name = ""
+  num_intervals <- length(increasing_sorted_intervals)
+  
+  # if the value is less than the lower interval
+  if(val <= increasing_sorted_intervals[1])
+  {
+    discretized_column_name =  (paste(INTERVAL_NAME_PREFIX, "_", "lesserthan", increasing_sorted_intervals[1], sep=""))
+  }
+  
+  # if the value is greater than the highest interval
+  if(val > increasing_sorted_intervals[num_intervals])
+  {
+    discretized_column_name = (paste(INTERVAL_NAME_PREFIX, "_", "greaterthan", increasing_sorted_intervals[num_intervals], sep=""))
+  }
+  
+  for(itr in 1:(num_intervals - 1))
+  {
+    #print(paste("ITR", itr))
+    if((val > increasing_sorted_intervals[itr]) && val <= (increasing_sorted_intervals[itr + 1]))
+    {
+      #print(paste("lower", increasing_sorted_intervals[itr]))
+      #print(paste("higher", increasing_sorted_intervals[itr + 1]))
+      
+      discretized_column_name = (paste(INTERVAL_NAME_PREFIX, "_", increasing_sorted_intervals[itr], "_", increasing_sorted_intervals[itr + 1], sep=""))
+      break
+    }
+  }
+  
+  #print(paste("Column name", discretized_column_name))
+  return (discretized_column_name)
+}
+
+```
+
+
+## Intervals for energy
+
+```{r}
+setwd("H:\\KE5107-Barry")
+vehicle_safety_df <- read.csv("training_vehicle_safety_wn.csv")
+
+energy_intervals <- c(12, 42, 55, 80, 124, 162, 224, 232, 292, 308, 310, 334, 344, 424, 459, 584, 642, 796, 832, 862, 866, 1245, 1455, 1704, 2902, 7194, 7816, 8647, 8668)
+
+
+vehicle_safety_df$GV_ENERGY_DISCRETE <- unlist(lapply(as.integer(vehicle_safety_df[,c("GV_ENERGY")]), get_interval_name, increasing_sorted_intervals = energy_intervals))
+
+vehicle_safety_df$GV_ENERGY_DISCRETE
+```
+#Intervals for age
+```{r}
+
+column_name <- "OA_AGE"
+discrete_column_name <- paste(column_name, "_DISCRETE", sep = "")
+
+age_intervals <- c(7, 15, 16, 24, 26, 27, 28, 36, 38, 40, 41, 46, 47, 50, 52, 55, 56, 63, 70, 90, 93)
+
+print(paste("Ages considered", length(age_intervals)))
+
+vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = age_intervals))
+
+vehicle_safety_df[,c(discrete_column_name)]
+
+
+```
+
+#Intervals for footprint
+```{r}
+
+column_name <- "GV_FOOTPRINT"
+discrete_column_name <- paste(column_name, "_DISCRETE", sep = "")
+
+intervals <- c(2.751,3.19,3.2461,3.318,3.3726,3.6208,3.8776,3.88325,3.8982,3.9005,3.9249,3.9562,3.957,4.1426,4.165,4.1884,4.1922,4.2432,4.4117,4.50715,4.512,4.52175,4.5346,4.563,4.6567,6.264,6.7768,7.0584,7.5601)
+
+print(paste(column_name, "considered", length(intervals)))
+
+vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
+
+vehicle_safety_df[,c(discrete_column_name)]
+
+
+```
+
+
+#Intervals for height
+```{r}
+
+column_name <- "OA_HEIGHT"
+discrete_column_name <- paste(column_name, "_DISCRETE", sep = "")
+
+intervals <- c(59,60,63,65,72,147,152,163,165,168,170,173,178,180,196,198,203,206,216)
+
+print(paste(column_name, "considered", length(intervals)))
+
+vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
+
+vehicle_safety_df[,c(discrete_column_name)]
+
+
+```
+
+
+#Intervals for weight
+```{r}
+
+column_name <- "OA_WEIGHT"
+discrete_column_name <- paste(column_name, "_DISCRETE", sep = "")
+
+intervals <- c(31,39,40,41,44,45,64,66,68,77,79,83,88,91,92,94,94.5,107,150)
+
+print(paste(column_name, "considered", length(intervals)))
+
+vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
+
+vehicle_safety_df[,c(discrete_column_name)]
+
+
+```
+
+
+#Intervals for curb weight
+```{r}
+
+column_name <- "GV_CURBWGT"
+discrete_column_name <- paste(column_name, "_DISCRETE", sep = "")
+
+intervals <- c(690,900,940,990,1100,1280,1295,1310,1330,1340,1360,1380,1470,1510,1520,1540,1560,1620,1775,1780,1790,1810,1820,1870,2700,2770,2870,3900,4240)
+
+print(paste(column_name, "considered", length(intervals)))
+
+vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
+
+vehicle_safety_df[,c(discrete_column_name)]
+
+
+```
+
+#Intervals for other vehicle weight
+```{r}
+
+column_name <- "GV_OTVEHWGT"
+discrete_column_name <- paste(column_name, "_DISCRETE", sep = "")
+
+intervals <- c(680,780,840,890,1010,1070,1330,1370,1410,1435,1470,1530,1550,1580,1620,1715,1760,1820,1840,1920,1965,2000,2060,2130,3090,3260,3990,4440,4490)
+
+print(paste(column_name, "considered", length(intervals)))
+
+vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
+
+vehicle_safety_df[,c(discrete_column_name)]
+
+
+```
+
+
+# Write the data frame to file
+```{r}
+write.csv(vehicle_safety_df, "discretized_values.csv", row.names = FALSE)
+```
