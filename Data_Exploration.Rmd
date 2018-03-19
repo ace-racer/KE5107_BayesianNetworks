@@ -14,45 +14,47 @@ library(ggplot2)
 library(lattice)
 ```
 
-Load vehicle data without missing target.
+## Impute Training Dataset
+
+Load vehicle training dataset without missing target.
 ```{r}
 setwd("/Users/davidleonardi/Projects/KE5107_BayesianNetworks/")
-data <- read.csv("./vehicle_safety_remove_missing_target.csv")
-data$GV_LANES <- as.factor(data$GV_LANES)
-data$GV_MODELYR <- as.factor(data$GV_MODELYR)
-data$GV_WGTCDTR <- as.factor(data$GV_WGTCDTR)
-data$OA_BAGDEPLY <- as.factor(data$OA_BAGDEPLY)
-data$OA_MAIS <- as.factor(data$OA_MAIS)
-data$OA_MANUSE <- as.factor(data$OA_MANUSE)
-data$OA_SEX <- as.factor(data$OA_SEX)
-data$VE_GAD1 <- as.factor(data$VE_GAD1)
+training_data <- read.csv("./Data/vehicle_safety_training_data.csv")
+training_data$GV_LANES <- as.factor(training_data$GV_LANES)
+training_data$GV_MODELYR <- as.factor(training_data$GV_MODELYR)
+training_data$GV_WGTCDTR <- as.factor(training_data$GV_WGTCDTR)
+training_data$OA_BAGDEPLY <- as.factor(training_data$OA_BAGDEPLY)
+training_data$OA_MAIS <- as.factor(training_data$OA_MAIS)
+training_data$OA_MANUSE <- as.factor(training_data$OA_MANUSE)
+training_data$OA_SEX <- as.factor(training_data$OA_SEX)
+training_data$VE_GAD1 <- as.factor(training_data$VE_GAD1)
 
-summary(data)
+summary(training_data)
 ```
 
 Show missing data in diagram.
 ```{r}
-missmap(data[-1], col=c('grey', 'steelblue'), y.cex=0.5, x.cex=0.8)
+missmap(training_data[-1], col=c('grey', 'steelblue'), y.cex=0.5, x.cex=0.8)
 ```
 
 Get hard numbers of missing data.
 ```{r}
 # Let's also get some hard numbers
-sort(sapply(data, function(x) { sum(is.na(x)) }), decreasing=TRUE)
+sort(sapply(training_data, function(x) { sum(is.na(x)) }), decreasing=TRUE)
 ```
 
 Show missing data pattern.
 ```{r}
-md.pattern(data)
+md.pattern(training_data)
 ```
 
 Use mice with Decision Tree to impute missing data.
 ```{r}
-imp.data <- mice(data, m=1, method='cart', printFlag=FALSE)
+imp.data <- mice(training_data, m=1, method='cart', printFlag=FALSE)
 summary(imp.data)
 ```
 
-Write imputted mean values from decision tree model.
+Write imputted values from decision tree model.
 ```{r}
 # write results
 write.mice.imputation(mi.res=imp.data, name="mice_imp_cart")
@@ -60,7 +62,7 @@ write.mice.imputation(mi.res=imp.data, name="mice_imp_cart")
 
 Compare it with Mean value.
 ```{r}
-imp.data_raw_mean <- mice(data, m=1, defaultMethod=c('mean', 'cart', 'cart', 'cart'), printFlag=FALSE)
+imp.data_raw_mean <- mice(training_data, m=1, defaultMethod=c('mean', 'cart', 'cart', 'cart'), printFlag=FALSE)
 summary(imp.data_raw_mean)
 ```
 
@@ -113,5 +115,34 @@ xyplot(imp.data_raw_mean, GV_DVLONG ~ GV_FOOTPRINT)
 Save the imputed data.
 ```{r}
 data_complete <- complete(imp.data)
-write.csv(data_complete, "./vehicle_safety_imputed_data.csv")
+write.csv(data_complete, "./Data/vehicle_safety_training_imputed_data.csv")
+```
+
+## Impute Testing Dataset
+
+Load vehicle testing dataset without missing target.
+```{r}
+testing_data <- read.csv("./Data/vehicle_safety_testing_data.csv")
+testing_data$GV_LANES <- as.factor(testing_data$GV_LANES)
+testing_data$GV_MODELYR <- as.factor(testing_data$GV_MODELYR)
+testing_data$GV_WGTCDTR <- as.factor(testing_data$GV_WGTCDTR)
+testing_data$OA_BAGDEPLY <- as.factor(testing_data$OA_BAGDEPLY)
+testing_data$OA_MAIS <- as.factor(testing_data$OA_MAIS)
+testing_data$OA_MANUSE <- as.factor(testing_data$OA_MANUSE)
+testing_data$OA_SEX <- as.factor(testing_data$OA_SEX)
+testing_data$VE_GAD1 <- as.factor(testing_data$VE_GAD1)
+
+summary(testing_data)
+```
+
+Use mice with Decision Tree to impute missing data.
+```{r}
+imp.data <- mice(testing_data, m=1, method='cart', printFlag=FALSE)
+summary(imp.data)
+```
+
+Save the imputed data.
+```{r}
+testing_data_complete <- complete(imp.data)
+write.csv(testing_data_complete, "./Data/vehicle_safety_testing_imputed_data.csv")
 ```

@@ -1,23 +1,23 @@
-2018-03-15 22:02:44 
+2018-03-19 13:16:05 
 
  /Users/davidleonardi/Projects/KE5107_BayesianNetworks/mice_imp_mean 
 
 Multiply imputed data set
 Call:
-mice(data = data, m = 1, defaultMethod = c("mean", "cart", "cart", 
-    "cart"), printFlag = FALSE)
+mice(data = training_data, m = 1, defaultMethod = c("mean", "cart", 
+    "cart", "cart"), printFlag = FALSE)
 Number of multiple imputations:  1
 Missing cells per column:
   GV_CURBWGT     GV_DVLAT    GV_DVLONG    GV_ENERGY     GV_LANES 
-          39         5877         5877         5877            3 
+          35         4998         4998         4998            3 
   GV_MODELYR  GV_OTVEHWGT   GV_SPLIMIT   GV_WGTCDTR       OA_AGE 
-           0         1992          221            0           14 
+           0         1702          195            0           13 
  OA_BAGDEPLY    OA_HEIGHT      OA_MAIS    OA_MANUSE       OA_SEX 
-           0         2116            0          385            0 
+           0         1798            0          329            0 
    OA_WEIGHT      VE_GAD1  VE_ORIGAVTW  VE_WHEELBAS   VE_PDOF_TR 
-        2008            0          219            8         1864 
+        1715            0          180            8         1598 
 GV_FOOTPRINT 
-         223 
+         184 
 Imputation methods:
   GV_CURBWGT     GV_DVLAT    GV_DVLONG    GV_ENERGY     GV_LANES 
       "mean"       "mean"       "mean"       "mean"       "cart" 
@@ -175,11 +175,11 @@ A BibTeX entry for LaTeX users is
                                                                                           sysname 
                                                                                          "Darwin" 
                                                                                           release 
-                                                                                         "16.7.0" 
+                                                                                         "17.4.0" 
                                                                                           version 
-"Darwin Kernel Version 16.7.0: Thu Jan 11 22:59:40 PST 2018; root:xnu-3789.73.8~1/RELEASE_X86_64" 
+"Darwin Kernel Version 17.4.0: Sun Dec 17 09:19:54 PST 2017; root:xnu-4570.41.2~1/RELEASE_X86_64" 
                                                                                          nodename 
-                                                                   "Chatarinas-MacBook-Pro.local" 
+                                                                           "Davids-MacBook-Pro-2" 
                                                                                           machine 
                                                                                          "x86_64" 
                                                                                             login 
@@ -190,14 +190,14 @@ A BibTeX entry for LaTeX users is
                                                                                   "davidleonardi" 
 R version 3.4.3 (2017-11-30)
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
-Running under: macOS Sierra 10.12.6
+Running under: macOS High Sierra 10.13.3
 
 Matrix products: default
 BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
 LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
 
 locale:
-[1] C
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -209,20 +209,20 @@ other attached packages:
 loaded via a namespace (and not attached):
  [1] lavaan_0.5-23.1097    mitools_2.3           splines_3.4.3        
  [4] colorspace_1.3-2      htmltools_0.3.6       stats4_3.4.3         
- [7] yaml_2.1.17           mgcv_1.8-22           rlang_0.2.0          
-[10] survival_2.41-3       pillar_1.2.1          nloptr_1.0.4         
+ [7] yaml_2.1.16           mgcv_1.8-22           rlang_0.1.6          
+[10] survival_2.41-3       pillar_1.1.0          nloptr_1.0.4         
 [13] foreign_0.8-69        lavaan.survey_1.1.3.1 plyr_1.8.4           
-[16] mirt_1.26.3           GPArotation_2014.11-1 stringr_1.3.0        
+[16] mirt_1.26.3           GPArotation_2014.11-1 stringr_1.2.0        
 [19] munsell_0.4.3         CDM_6.1-10            gtable_0.2.0         
-[22] mvtnorm_1.0-7         coda_0.19-1           evaluate_0.10.1      
-[25] knitr_1.20            permute_0.9-4         sirt_2.5-45          
+[22] mvtnorm_1.0-6         coda_0.19-1           evaluate_0.10.1      
+[25] knitr_1.18            permute_0.9-4         sirt_2.5-45          
 [28] parallel_3.4.3        backports_1.1.2       scales_0.5.0         
 [31] vegan_2.4-6           lme4_1.1-15           polycor_0.7-9        
-[34] mnormt_1.5-5          digest_0.6.15         stringi_1.1.6        
-[37] survey_3.33-2         grid_3.4.3            rprojroot_1.3-2      
+[34] mnormt_1.5-5          digest_0.6.14         stringi_1.1.6        
+[37] survey_3.33           grid_3.4.3            rprojroot_1.3-2      
 [40] quadprog_1.5-5        tools_3.4.3           magrittr_1.5         
-[43] lazyeval_0.2.1        tibble_1.4.2          cluster_2.0.6        
+[43] lazyeval_0.2.1        tibble_1.4.1          cluster_2.0.6        
 [46] pbivnorm_0.6.0        TAM_2.9-35            MASS_7.3-47          
-[49] Matrix_1.2-12         minqa_1.2.4           rmarkdown_1.9        
-[52] rpart_4.1-11          sfsmisc_1.1-2         nnet_7.3-12          
+[49] Matrix_1.2-12         minqa_1.2.4           rmarkdown_1.8        
+[52] rpart_4.1-12          sfsmisc_1.1-2         nnet_7.3-12          
 [55] nlme_3.1-131          compiler_3.4.3       
