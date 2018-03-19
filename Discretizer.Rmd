@@ -49,14 +49,16 @@ get_interval_name <- function(val, increasing_sorted_intervals)
 
 ```{r}
 setwd("H:\\KE5107-Barry")
-vehicle_safety_df <- read.csv("training_vehicle_safety_wn.csv")
+input_file_name <- "vehicle_safety_training_imputed_balanced_data.csv"
+input_file_location <- paste("1903//data//", input_file_name, sep = "")
+vehicle_safety_df <- read.csv(input_file_location)
 
 energy_intervals <- c(12, 42, 55, 80, 124, 162, 224, 232, 292, 308, 310, 334, 344, 424, 459, 584, 642, 796, 832, 862, 866, 1245, 1455, 1704, 2902, 7194, 7816, 8647, 8668)
 
 
 vehicle_safety_df$GV_ENERGY_DISCRETE <- unlist(lapply(as.integer(vehicle_safety_df[,c("GV_ENERGY")]), get_interval_name, increasing_sorted_intervals = energy_intervals))
 
-vehicle_safety_df$GV_ENERGY_DISCRETE
+#vehicle_safety_df$GV_ENERGY_DISCRETE
 ```
 #Intervals for age
 ```{r}
@@ -70,7 +72,7 @@ print(paste("Ages considered", length(age_intervals)))
 
 vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = age_intervals))
 
-vehicle_safety_df[,c(discrete_column_name)]
+#vehicle_safety_df[,c(discrete_column_name)]
 
 
 ```
@@ -87,7 +89,7 @@ print(paste(column_name, "considered", length(intervals)))
 
 vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
 
-vehicle_safety_df[,c(discrete_column_name)]
+# vehicle_safety_df[,c(discrete_column_name)]
 
 
 ```
@@ -105,7 +107,7 @@ print(paste(column_name, "considered", length(intervals)))
 
 vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
 
-vehicle_safety_df[,c(discrete_column_name)]
+# vehicle_safety_df[,c(discrete_column_name)]
 
 
 ```
@@ -123,7 +125,7 @@ print(paste(column_name, "considered", length(intervals)))
 
 vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
 
-vehicle_safety_df[,c(discrete_column_name)]
+#vehicle_safety_df[,c(discrete_column_name)]
 
 
 ```
@@ -141,7 +143,7 @@ print(paste(column_name, "considered", length(intervals)))
 
 vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
 
-vehicle_safety_df[,c(discrete_column_name)]
+#vehicle_safety_df[,c(discrete_column_name)]
 
 
 ```
@@ -158,13 +160,31 @@ print(paste(column_name, "considered", length(intervals)))
 
 vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
 
-vehicle_safety_df[,c(discrete_column_name)]
+#vehicle_safety_df[,c(discrete_column_name)]
 
 
 ```
 
+#Intervals for angle of impact
+```{r}
+
+column_name <- "VE_PDOF_TR"
+discrete_column_name <- paste(column_name, "_DISCRETE", sep = "")
+
+intervals <- c(5,15,45,85,105,115,125,135,145,165,175,315,345,355)
+
+print(paste(column_name, "considered", length(intervals)))
+
+vehicle_safety_df[,c(discrete_column_name)] <- unlist(lapply(as.integer(vehicle_safety_df[,c(column_name)]), get_interval_name, increasing_sorted_intervals = intervals))
+
+#vehicle_safety_df[,c(discrete_column_name)]
+
+
+```
 
 # Write the data frame to file
 ```{r}
-write.csv(vehicle_safety_df, "discretized_values.csv", row.names = FALSE)
+setwd("H:\\KE5107-Barry")
+output_file_name <- paste("discretized_", input_file_name, sep="")
+write.csv(vehicle_safety_df, output_file_name, row.names = FALSE)
 ```
